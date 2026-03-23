@@ -8,6 +8,8 @@ points:
   key.padding: ky
   zones:
     matrix:
+      anchor:
+        shift: [160, -160]
       columns:
         pinky:
           key:
@@ -89,7 +91,8 @@ outlines:
     - what: rectangle
       size: [30, 25]
       adjust:
-        shift: [28.9, -6]
+        ref: matrix_pinky_bottom
+        shift: [28.9, -44]
         rotate: -20
       fillet: 1
       operation: add
@@ -170,6 +173,7 @@ pcbs:
           from: "{{col_net}}"
           to: "{{row_net}}"
           hotswap: false
+          stabilizers: false
         adjust:
           rotate: -90
 
@@ -179,6 +183,17 @@ pcbs:
         adjust:
           shift: [-5, 0]
           rotate: 90
+        params:
+          from: "{{row_net}}"
+          to: "{{row_net}}"
+          pin_distance: 7.62
+          smd: false
+
+      switch_crossover:
+        what: crossover
+        where: /matrix/
+        adjust:
+          shift: [5, -5]
         params:
           from: "{{row_net}}"
           to: "{{row_net}}"
@@ -200,40 +215,62 @@ pcbs:
       pro_micro:
         what: promicro
         where:
-          ref: matrix_inner_bottom
-          shift: [23, -6]
-          rotate: -90
+            ref: matrix_inner_bottom
+            shift: [23, -6]
+            rotate: -90
         params:
-          RAW: RAW
-          GND: GND
-          RST: RST
-          VCC: VCC
-          P21: C0
-          P20: C1
-          P19: C2
-          P18: C3
-          P15: C4
-          P14: R0
-          P16: R1
-          P10: R2
-          P9:  R3
-          P8:  ENC_A
-          P7:  ENC_B
-          P6:  ENC_SWT
-          P1:  SDA
-          P0:  SCL
+            RAW: RAW
+            GND: GND
+            RST: RST
+            VCC: VCC
+            P21: C0
+            P20: C1
+            P19: C2
+            P18: C3
+            P15: C4
+            P14: R0
+            P16: R1
+            P10: R2
+            P9:  R3
+            P8:  ENC_A
+            P7:  ENC_B
+            P6:  ENC_SWT
+            P2:  SDA
+            P3:  SCL
 
       trrs:
-        what: trrs
+        what: trrsbreakoutv3
         where:
-          ref: matrix_inner_bottom
-          shift: [23, -30]
+            ref: matrix_inner_bottom
+            shift: [23, -30]
         params:
-          TIP: GND
-          R1:  SCL
-          R2:  SDA
-          S:   VCC
-          NC_T1: ENC_B
-          NC_T2: ENC_A
-          NC_B1: ENC_B
-          NC_B2: ENC_A
+            TIP: SCL
+            R1:  SDA
+            R2:  GND
+            S:   VCC
+            NC_T1: ENC_B
+            NC_T2: ENC_A
+            NC_B1: ENC_B
+            NC_B2: ENC_A
+
+      pullup_sda:
+        what: resistor
+        where:
+            ref: matrix_inner_bottom
+            shift: [23, -2]
+        params:
+            from: VCC
+            to: SDA
+            pin_distance: 8
+            smd: false
+
+      pullup_scl:
+        what: resistor
+        where:
+            ref: matrix_inner_bottom
+            shift: [23, -5]
+        params:
+            from: VCC
+            to: SCL
+            pin_distance: 8
+            smd: false
