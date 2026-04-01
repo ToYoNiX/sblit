@@ -1,8 +1,8 @@
 units:
   kx: u
   ky: u
-  px: 7
-  py: 7
+  px: 0
+  py: 0
 
 points:
   key.padding: ky
@@ -19,23 +19,23 @@ points:
         ring:
           key:
             col_net: C1
-            spread: kx
-            stagger: 0.42 ky
+            spread: 1.01kx
+            stagger: 0.66 ky
         middle:
           key:
             col_net: C2
             spread: kx
-            stagger: 0.28 ky
+            stagger: 0.125 ky
         index:
           key:
             col_net: C3
             spread: kx
-            stagger: -0.17 ky
+            stagger: -0.125 ky
         inner:
           key:
             col_net: C4
             spread: kx
-            stagger: -0.11 ky
+            stagger: -0.125 ky
       rows:
         top:
           row_net: R2
@@ -47,12 +47,12 @@ points:
     thumbs:
       anchor:
         ref: matrix_inner_bottom
-        shift: [-1.3kx, -2.95 ky]
+        shift: [-1.1kx, -3ky]
       columns:
         inner:
           key:
             spread: kx
-            splay: 0
+            splay: -5
             origin: [-0.5 kx, -0.5 ky]
             col_net: C2
         home:
@@ -73,97 +73,173 @@ points:
           rotate: 90
 
 outlines:
-  keycap:
+  # ─── primitives ──────────────────────────────────────────────
+  key_keycaps:
     - what: rectangle
       where: /matrix|thumbs/
       size: [kx - 1, ky - 1]
 
-  switch_cutouts:
+  key_switch_cutouts:
     - what: rectangle
       where: /matrix|thumbs/
       size: [14, 14]
 
-  plate_cutout:
+  key_footprints:
     - what: rectangle
       where: /matrix|thumbs/
-      size: [kx + px, ky + py]
-      fillet: 1
+      size: [kx, ky]
+
+  board_edge:
     - what: rectangle
-      size: [30, 25]
       adjust:
-        ref: matrix_pinky_bottom
-        shift: [28.9, -44]
-        rotate: -20
-      fillet: 1
+        ref: matrix_middle_bottom
+        shift: [11.5, -40.5]
+      size: [119, 100]
+      fillet: 3
+
+  controller_cavity:
+    - what: rectangle
+      size: [30, 70]
+      operation: add
+    - what: rectangle
+      adjust:
+        shift: [14.1, -37.1]
+        rotate: 55
+      size: [30, 50]
       operation: add
 
+  m3_nut_shape:
+    - what: polygon
+      adjust:
+        shift: [-2.75, 1.5875]
+      points:
+        - shift: [  0,     -3.175 ]
+        - shift: [  2.75,  -1.5875]
+        - shift: [  2.75,   1.5875]
+        - shift: [  0,      3.175 ]
+        - shift: [ -2.75,   1.5875]
+        - shift: [ -2.75,  -1.5875]
+
+  # ─── mounting holes & matching nuts (defined together) ───────
   mounting_holes:
     - what: circle
       where:
-        ref: matrix_pinky_top
-        shift: [9, 9.5]
+        ref: matrix_middle_bottom
+        shift: [-44.5, 6]
       radius: 1.6
     - what: circle
       where:
-        ref: matrix_pinky_bottom
-        shift: [9, -9.5]
+        ref: matrix_middle_bottom
+        shift: [46.5, 6]
       radius: 1.6
     - what: circle
       where:
-        ref: matrix_ring_top
-        shift: [10, -16]
+        ref: matrix_middle_bottom
+        shift: [-44.5, -87]
       radius: 1.6
     - what: circle
       where:
-        ref: matrix_inner_bottom
-        shift: [-10, -7.4]
+        ref: matrix_middle_bottom
+        shift: [67.5, -87]
       radius: 1.6
     - what: circle
       where:
-        ref: thumbs_outter_thumb
-        shift: [0, 11]
+        ref: matrix_middle_bottom
+        shift: [-10, -65]
       radius: 1.6
 
-  bottom:
+  m3_nuts:
     - what: outline
-      name: plate_cutout
+      name: m3_nut_shape
+      where:
+        ref: matrix_middle_bottom
+        shift: [-44.5, 6]
+    - what: outline
+      name: m3_nut_shape
+      where:
+        ref: matrix_middle_bottom
+        shift: [46.5, 6]
+    - what: outline
+      name: m3_nut_shape
+      where:
+        ref: matrix_middle_bottom
+        shift: [-44.5, -87]
+    - what: outline
+      name: m3_nut_shape
+      where:
+        ref: matrix_middle_bottom
+        shift: [67.5, -87]
+    - what: outline
+      name: m3_nut_shape
+      where:
+        ref: matrix_middle_bottom
+        shift: [-10, -65]
+
+  # ─── assembled layers ─────────────────────────────────────────
+  plate_cutout:
+    - what: outline
+      name: key_footprints
       operation: add
-    - what: rectangle
-      size: [23, 76]
+    - what: outline
+      name: board_edge
+      operation: add
+    - what: outline
+      name: controller_cavity
       adjust:
-        ref: matrix_inner_bottom
-        shift: [22, -25]
-      fillet: 1
-      operation: add
-    - what: outline
-      name: mounting_holes
+        ref: matrix_middle_bottom
+        shift: [65, -25]
       operation: subtract
 
-  plate:
+  bottom_layer:
+    - what: outline
+      name: board_edge
+      operation: add
     - what: outline
       name: plate_cutout
       operation: add
     - what: outline
-      name: switch_cutouts
-      operation: subtract
-    - what: outline
       name: mounting_holes
-      operation: subtract
+      operation: stack
 
-  front:
+  switch_plate:
     - what: outline
       name: plate_cutout
       operation: add
     - what: outline
-      name: keycap
+      name: key_switch_cutouts
       operation: subtract
+    - what: outline
+      name: mounting_holes
+      operation: stack
+
+  keycap_layer:
+    - what: outline
+      name: plate_cutout
+      operation: add
+    - what: outline
+      name: key_keycaps
+      operation: subtract
+
+  pcb_layer:
+    - what: outline
+      name: board_edge
+      operation: add
+    - what: outline
+      name: plate_cutout
+      operation: add
+    - what: outline
+      name: m3_nuts
+      operation: stack
+    - what: outline
+      name: mounting_holes
+      operation: stack
 
 pcbs:
   collapse:
     template: kicad8
     outlines:
       edge:
-        outline: bottom
+        outline: pcb_layer
 
     footprints:
       mx_switches:
@@ -174,6 +250,7 @@ pcbs:
           to: "{{row_net}}"
           hotswap: false
           stabilizers: false
+          reverse: true
         adjust:
           rotate: -90
 
@@ -193,7 +270,7 @@ pcbs:
         what: crossover
         where: /matrix/
         adjust:
-          shift: [5, -5]
+          shift: [4, -6]
         params:
           from: "{{row_net}}"
           to: "{{row_net}}"
@@ -202,8 +279,8 @@ pcbs:
         what: rotary
         adjust:
           ref: matrix_inner_bottom
-          shift: [23, -47]
-          rotate: -120
+          shift: [23, -52]
+          rotate: -125
         params:
           A: ENC_A
           B: ENC_B
@@ -216,7 +293,7 @@ pcbs:
         what: promicro
         where:
             ref: matrix_inner_bottom
-            shift: [23, -6]
+            shift: [22.5, -4]
             rotate: -90
         params:
             RAW: RAW
@@ -242,7 +319,7 @@ pcbs:
         what: trrsbreakoutv3
         where:
             ref: matrix_inner_bottom
-            shift: [23, -30]
+            shift: [23, -27.5]
         params:
             TIP: SCL
             R1:  SDA
@@ -252,12 +329,15 @@ pcbs:
             NC_T2: ENC_A
             NC_B1: ENC_B
             NC_B2: ENC_A
+            reverse: true
+            x_shift: 0
+            y_shift: 3
 
       pullup_sda:
         what: resistor
         where:
             ref: matrix_inner_bottom
-            shift: [23, -2]
+            shift: [23, -1]
         params:
             from: VCC
             to: SDA
@@ -268,9 +348,35 @@ pcbs:
         what: resistor
         where:
             ref: matrix_inner_bottom
-            shift: [23, -5]
+            shift: [23, -4]
         params:
             from: VCC
             to: SCL
             pin_distance: 8
+            smd: false
+
+      series_sda:
+        what: resistor
+        where:
+            ref: matrix_inner_bottom
+            shift: [22.5, -9]
+        adjust:
+          rotate: 90
+        params:
+            from: SDA
+            to: SDA
+            pin_distance: 5.08
+            smd: false
+
+      series_scl:
+        what: resistor
+        where:
+            ref: matrix_inner_bottom
+            shift: [25, -9]
+        adjust:
+          rotate: 90
+        params:
+            from: SCL
+            to: SCL
+            pin_distance: 5.08
             smd: false
