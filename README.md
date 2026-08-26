@@ -55,9 +55,45 @@ revision is a re-export away.
 
 I've learned a huge amount doing this, and I'm still learning.
 
+## TRRS and hot-plug safety
+
+A plain TRRS split link has a nasty failure mode: while the plug is being pulled out, the
+moving contacts sweep across each other, and you can briefly short VCC into a data pin.
+That's the worst case — it can fry the controller. It happens on an accidental yank, not
+just on deliberate unplugging.
+
+Two things in this design guard against it:
+
+**Series resistors on the I2C lines.** I2C tolerates series resistance as long as the total
+on each line stays under about 10k. So each half carries a 220R resistor in series on SDA
+and on SCL (`series_sda` / `series_scl` in `config.yaml`) — 440R total per line once both
+halves are connected. It works perfectly: a 1m TRRS cable, and countless hot-plugs with no
+dead Pro Micros so far. When you pull the cable the controller resets because the I2C
+connection drops, and it reconnects when you plug it back in, so in practice it behaves
+like a hot-pluggable port.
+
+**Pin order chosen so GND shields the data lines.** The jack is wired:
+
+| Contact | Net |
+| --- | --- |
+| Tip | SCL |
+| Ring 1 | SDA |
+| Ring 2 | GND |
+| Sleeve | VCC |
+
+GND sits directly between VCC and the two data lines. As the plug is withdrawn the
+contacts sweep across each other, so VCC meets GND before it can ever reach SDA or SCL —
+a rail-to-rail short the supply shrugs off, instead of 5V landing on an MCU pin. The data
+lines are the two contacts furthest from VCC, and the series resistors above are the
+second line of defense behind that.
+
+To be clear: this is **not** meant as a hot-swap feature. It's there so an accidental
+removal doesn't cost you a controller.
+
 ## Status
 
 - ✅ Layout and laser-cut plate stack — done and buildable.
+- ✅ TRRS hot-plug protection — series resistors and a safe pin order, see above.
 - 🚧 **PCB** — I want a single-sided, DIY-friendly PCB (something I can etch/mill myself
   rather than order). It isn't working yet, but I'm still working on it. The `pcbs` section
   of `config.yaml` is that ongoing attempt, and the custom footprints in my ergogen fork
