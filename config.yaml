@@ -113,12 +113,12 @@ outlines:
       adjust:
         shift: [-2.75, 1.5875]
       points:
-        - shift: [  0,     -3.175 ]
-        - shift: [  2.75,  -1.5875]
-        - shift: [  2.75,   1.5875]
-        - shift: [  0,      3.175 ]
-        - shift: [ -2.75,   1.5875]
-        - shift: [ -2.75,  -1.5875]
+        - shift: [0, -3.175]
+        - shift: [2.75, -1.5875]
+        - shift: [2.75, 1.5875]
+        - shift: [0, 3.175]
+        - shift: [-2.75, 1.5875]
+        - shift: [-2.75, -1.5875]
 
   # ─── mounting holes & matching nuts (defined together) ───────
   mounting_holes:
@@ -235,7 +235,7 @@ outlines:
       operation: stack
 
 pcbs:
-  collapse:
+  tnx:
     template: kicad8
     outlines:
       edge:
@@ -292,91 +292,91 @@ pcbs:
       pro_micro:
         what: promicro
         where:
-            ref: matrix_inner_bottom
-            shift: [22.5, -4]
-            rotate: -90
+          ref: matrix_inner_bottom
+          shift: [22.5, -4]
+          rotate: -90
         params:
-            RAW: RAW
-            GND: GND
-            RST: RST
-            VCC: VCC
-            P21: C0
-            P20: C1
-            P19: C2
-            P18: C3
-            P15: C4
-            P14: R0
-            P16: R1
-            P10: R2
-            P9:  R3
-            P8:  ENC_A
-            P7:  ENC_B
-            P6:  ENC_SWT
-            P2:  SDA
-            P3:  SCL
+          RAW: RAW
+          GND: GND
+          RST: RST
+          VCC: VCC
+          P21: C0
+          P20: C1
+          P19: C2
+          P18: C3
+          P15: C4
+          P14: R0
+          P16: R1
+          P10: R2
+          P9: R3
+          P8: ENC_A
+          P7: ENC_B
+          P6: ENC_SWT
+          P2: SDA
+          P3: SCL
 
       trrs:
         what: trrsbreakoutv3
         where:
-            ref: matrix_inner_bottom
-            shift: [23, -27.5]
+          ref: matrix_inner_bottom
+          shift: [23, -27.5]
         params:
-            TIP: SCL
-            R1:  SDA
-            R2:  GND
-            S:   VCC
-            NC_T1: ENC_B
-            NC_T2: ENC_A
-            NC_B1: ENC_B
-            NC_B2: ENC_A
-            reverse: true
-            x_shift: 0
-            y_shift: 3
+          TIP: SCL
+          R1: SDA
+          R2: GND
+          S: VCC
+          NC_T1: ENC_B
+          NC_T2: ENC_A
+          NC_B1: ENC_B
+          NC_B2: ENC_A
+          reverse: true
+          x_shift: 0
+          y_shift: 3
 
       pullup_sda:
         what: resistor
         where:
-            ref: matrix_inner_bottom
-            shift: [23, -1]
+          ref: matrix_inner_bottom
+          shift: [23, -1]
         params:
-            from: VCC
-            to: SDA
-            pin_distance: 8
-            smd: false
+          from: VCC
+          to: SDA
+          pin_distance: 8
+          smd: false
 
       pullup_scl:
         what: resistor
         where:
-            ref: matrix_inner_bottom
-            shift: [23, -4]
+          ref: matrix_inner_bottom
+          shift: [23, -4]
         params:
-            from: VCC
-            to: SCL
-            pin_distance: 8
-            smd: false
+          from: VCC
+          to: SCL
+          pin_distance: 8
+          smd: false
 
       series_sda:
         what: resistor
         where:
-            ref: matrix_inner_bottom
-            shift: [22.5, -9]
+          ref: matrix_inner_bottom
+          shift: [22.5, -9]
         adjust:
           rotate: 90
         params:
-            from: SDA
-            to: SDA
-            pin_distance: 5.08
-            smd: false
+          from: SDA
+          to: SDA
+          pin_distance: 5.08
+          smd: false
 
       series_scl:
         what: resistor
         where:
-            ref: matrix_inner_bottom
-            shift: [25, -9]
+          ref: matrix_inner_bottom
+          shift: [25, -9]
         adjust:
           rotate: 90
         params:
-            from: SCL
-            to: SCL
-            pin_distance: 5.08
-            smd: false
+          from: SCL
+          to: SCL
+          pin_distance: 5.08
+          smd: false
