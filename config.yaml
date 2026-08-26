@@ -235,7 +235,7 @@ outlines:
       operation: stack
 
 pcbs:
-  tnx:
+  tnx_sblit36:
     template: kicad8
     outlines:
       edge:
